@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="redirect_form">
+        <form t-att-action="api_url" method="post">
+            <input type="hidden" name="action" value="process_fixed" />
+            <input type="hidden" name="key_id" t-att-value="bac_key_id"/>
+            <input type="hidden" name="amount" t-att-value="bac_amount"/>
+            <input type="hidden" name="url_finish" t-att-value="bac_return"/>
+            <input type="hidden" name="order_description" t-att-value="bac_reference"/>
+            <input type="hidden" name="customer_receipt" value="true"/>
+            <input type="hidden" name="language" value="es"/>
+            <input type="hidden" name="hash" t-att-value="bac_hash"/>
+            <input type="hidden" name="first_name" t-att-value="bac_partner_first_name"/>
+            <input type="hidden" name="last_name" t-att-value="bac_partner_last_name"/>
+            <input type="hidden" name="email" t-att-value="bac_partner_email"/>
+            <input type="hidden" name="address_1" t-att-value="bac_partner_address1"/>
+            <input type="hidden" name="postal_code" t-att-value="bac_partner_postal_code"/>
+            <input type="hidden" name="city" t-att-value="bac_partner_city"/>
+            <input type="hidden" name="shipping_state" t-att-value="bac_partner_state"/>
+            <input type="hidden" name="country" t-att-value="bac_partner_country"/>
+            <input type="hidden" name="phone" t-att-value="bac_partner_phone"/>
+        </form>
+    </template>
+
+</odoo>

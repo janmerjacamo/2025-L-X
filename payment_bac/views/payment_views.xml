@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="provider_form_bac" model="ir.ui.view">
+        <field name="name">provider.form.bac</field>
+        <field name="model">payment.provider</field>
+        <field name="inherit_id" ref="payment.payment_provider_form"/>
+        <field name="arch" type="xml">
+            <group name="provider_credentials" position='inside'>
+                <group attrs="{'invisible': [('code', '!=', 'bac')]}">
+                    <field name="bac_key_id"/>
+                    <field name="bac_key_text"/>
+                </group>
+            </group>
+        </field>
+    </record>
+
+</odoo>
