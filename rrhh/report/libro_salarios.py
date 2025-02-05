@@ -46,16 +46,18 @@ class ReportLibroSalarios(models.AbstractModel):
         for dias in nomina_id.worked_days_line_ids:
             if dias.code in ausencias_restar:
                 dias_ausentados_restar += dias.number_of_days
+
+        reference_calendar = nomina_id._get_out_of_contract_calendar()
         if contracts.date_start and nomina_id.date_from <= contracts.date_start <= nomina_id.date_to:
-            dias_laborados = employee_id._get_work_days_data(Datetime.from_string(contracts.date_start), Datetime.from_string(nomina_id.date_to), calendar=contracts.resource_calendar_id)
+            dias_laborados = reference_calendar.get_work_duration_data(Datetime.from_string(contracts.date_start), Datetime.from_string(nomina_id.date_to), compute_leaves=False,domain = False)
             dias = (dias_laborados['days'] + 1 - dias_ausentados_restar) if (dias_laborados['days'] + 1 - dias_ausentados_restar) >= 30 else 30
         elif contracts.date_end and nomina_id.date_from <= contracts.date_end <= nomina_id.date_to:
-            dias_laborados = employee_id._get_work_days_data(Datetime.from_string(nomina_id.date_from), Datetime.from_string(contracts.date_end), calendar=contracts.resource_calendar_id)
+            dias_laborados = reference_calendar.get_work_duration_data(Datetime.from_string(nomina_id.date_from), Datetime.from_string(contracts.date_end), compute_leaves=False,domain = False)
             dias = (dias_laborados['days'] + 1 - dias_ausentados_restar) if (dias_laborados['days'] + 1 - dias_ausentados_restar) <= 30 else 30
         else:
             if contracts.schedule_pay == 'monthly':
                 dias = 30 - dias_ausentados_restar
-            if contracts.schedule_pay == 'bi-monthly':
+            if contracts.schedule_pay == 'bi-weekly':
                 dias = 15 - dias_ausentados_restar
         return dias
 
@@ -127,7 +129,9 @@ class ReportLibroSalarios(models.AbstractModel):
                 work = -1
                 trabajo = -1
                 dias_calculados = self.dias_trabajados(nomina.employee_id,nomina)
-                dias_laborados = nomina.employee_id._get_work_days_data(Datetime.from_string(nomina.date_from), Datetime.from_string(nomina.date_to), calendar=nomina.employee_id.contract_id.resource_calendar_id)
+                reference_calendar = nomina._get_out_of_contract_calendar()
+
+                dias_laborados = reference_calendar.get_work_duration_data(Datetime.from_string(nomina.date_from), Datetime.from_string(nomina.date_to), compute_leaves=False,domain = False)
                 dias_laborados_netos = 0
                 # Si tiene mas de 150 dias de trabajo entre la fecha de la nomina, es por que se paga bono14 o aguinaldo
                 if dias_laborados['days'] > 150:
@@ -135,7 +139,7 @@ class ReportLibroSalarios(models.AbstractModel):
                         dias_laborados_netos =  dias_laborados['days'] +1
                         # Si la fecha de contrato esta entre la fecha de la planilla no se le pagan los 365 dias, entonces se calculan los días entre el contrato y fecha final de planilla
                     if nomina.date_from <= nomina.contract_id.date_start <= nomina.date_to:
-                        dias_laborados_netos = nomina.employee_id._get_work_days_data(Datetime.from_string(nomina.contract_id.date_start), Datetime.from_string(nomina.date_to), calendar=nomina.employee_id.contract_id.resource_calendar_id)['days']+1
+                        dias_laborados_netos = reference_calendar.get_work_duration_data(Datetime.from_string(nomina.contract_id.date_start), Datetime.from_string(nomina.date_to),compute_leaves=False,domain = False)['days']+1
 
                 for linea in nomina.worked_days_line_ids:
                     if linea.number_of_days > 31:

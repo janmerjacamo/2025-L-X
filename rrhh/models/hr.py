@@ -9,7 +9,7 @@ class HrEmployeeBase(models.AbstractModel):
 
     codigo_empleado = fields.Char('Código del empleado')
 
-class hr_employee(models.Model):
+class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
 #    promedio_salario = fields.function(_promedio_salario, string='Promedio Salario', digits_compute=dp.get_precision('Account')),
@@ -62,7 +62,7 @@ class hr_employee(models.Model):
 
     @api.model
     def name_search(self, name, args=None, operator='ilike', limit=100):
-        res1 = super(hr_employee, self).name_search(name, args, operator=operator, limit=limit)
+        res1 = super(HrEmployee, self).name_search(name, args, operator=operator, limit=limit)
 
         records = self.search([('codigo_empleado', 'ilike', name)], limit=limit)
         res2 = records.name_get()

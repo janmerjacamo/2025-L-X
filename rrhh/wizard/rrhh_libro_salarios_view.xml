@@ -1,26 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-        <record id="view_rrhh_libro_salarios" model="ir.ui.view">
-              <field name="name">Libro de salarios</field>
-              <field name="model">rrhh.libro_salarios</field>
-              <field name="arch" type="xml">
-                <form string="Libro de salarios">
-                    <group string="Año">
-                        <field name="anio"/>
-                    </group>
-                    <footer>
-                        <button name="print_report" string="Print"  type="object" class="btn-primary"/>
-                        <button string="Cancel" class="btn-default" special="cancel" />
-                    </footer>
-                </form>
-              </field>
-        </record>
+    <record id="view_rrhh_libro_salarios" model="ir.ui.view">
+            <field name="name">Libro de salarios</field>
+            <field name="model">rrhh.libro_salarios</field>
+            <field name="arch" type="xml">
+            <form string="Libro de salarios">
+                <group string="Año">
+                    <field name="anio"/>
+                </group>
+                <group>
+                    <field name="name" invisible="1"/>
+                    <field name="archivo" readonly="1" filename="name"/>
+                </group>
+                <footer>
+                    <button name="print_report" string="Print"  type="object" class="btn-primary"/>
+                    <button name="print_report_excel" string="Print Excel"  type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+            </field>
+    </record>
 
-        <act_window id="action_rrhh_libro_salarios"
-            name="Libro de salarios"
-            res_model="rrhh.libro_salarios"
-            binding_model="hr.employee"
-            view_mode="form" target="new"/>
+    <record id="action_libro_salarios" model="ir.actions.report">
+        <field name="name">Libro de salarios</field>
+        <field name="model">rrhh.libro_salarios</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">rrhh.libro_salarios</field>
+        <field name="report_file">rrhh.libro_salarios</field>
+        <field name="binding_model_id" ref="model_hr_employee"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_libro_salarios"/>
+    </record>
+
+    <record id="action_rrhh_libro_salarios" model="ir.actions.act_window">
+        <field name="name">Libro de salarios</field>
+        <field name="res_model">rrhh.libro_salarios</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_rrhh_libro_salarios"/>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_hr_employee"/>
+    </record>
 
 </odoo>

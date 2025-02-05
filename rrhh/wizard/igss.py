@@ -104,9 +104,9 @@ class rrhh_igss_wizard(models.TransientModel):
 
                     ausencias = self.env['hr.leave'].search([('employee_id','=', empleado['empleado_id']),('request_date_from','>=',self.fecha_inicial),('request_date_to','<=',self.fecha_final),('state','=','validate')])
                     if ausencias:
-                        reglas = [x.code for x in slip.employee_id.company_id.igss_ids]
+                        reglas = [x.name for x in slip.employee_id.company_id.igss_ids]
                         for ausencia in ausencias:
-                            if ausencia.holiday_status_id.code in reglas:
+                            if ausencia.holiday_status_id.name in reglas:
                                 fecha_inicio = str(datetime.strptime(str(ausencia.date_from),'%Y-%m-%d %H:%M:%S').date().strftime('%d/%m/%Y'))
                                 fecha_fin = str(datetime.strptime(str(ausencia.date_to),'%Y-%m-%d %H:%M:%S').date().strftime('%d/%m/%Y'))
                                 suspensiones.append(numero_liquidacion + '|' + numero_afiliado + '|' + primer_nombre + '|' + segundo_nombre + '|' + primer_apellido + '|' + segundo_apellido + '|' + apellido_casada + '|' + fecha_inicio + '|' + fecha_fin + '|' + '\r\n')

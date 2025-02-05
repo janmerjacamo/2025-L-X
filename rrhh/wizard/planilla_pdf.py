@@ -91,6 +91,7 @@ class report_planilla_pdf(models.AbstractModel):
                 linea['estatico']['codigo_empleado'] = slip.employee_id.codigo_empleado
                 linea['estatico']['nombre_empleado'] = slip.employee_id.name
                 linea['estatico']['fecha_ingreso'] = slip.contract_id.date_start
+    #            linea['estatico']['fecha_ingreso'] = slip.contract_id.date_start
                 linea['estatico']['puesto'] = slip.employee_id.job_id.name
 
                 dias = 0
@@ -149,6 +150,7 @@ class report_planilla_pdf(models.AbstractModel):
                         linea['estatico']['cuenta_analitica'] = llave
 
                 lineas[llave][slip.employee_id.job_id.name]['datos'].append(linea)
+
 
             reporte['columnas'] = columnas
             reporte['lineas'] = lineas

@@ -14,25 +14,17 @@ class rrhh_planilla_wizard(models.TransientModel):
     nomina_id = fields.Many2one('hr.payslip.run', 'Nomina', default=lambda self: self.env['hr.payslip.run'].browse(self._context.get('active_id')), required=True)
     planilla_id = fields.Many2one('rrhh.planilla', 'Planilla', required=True)
     archivo = fields.Binary('Archivo')
-    name =  fields.Char('File Name', size=32)
+    name =  fields.Char('File Name', default='planilla.xlsx', size=32)
     agrupado  = fields.Boolean('Agrupado por cuenta analítica')
 
-    def generar_pdf(self):
+    def print_report(self):
         datas = {'ids': self.env.context.get('active_ids', [])}
         res = self.read([])
         res = res and res[0] or {}
         datas['form'] = res
-        return self.env.ref('rrhh.action_planilla_pdf').report_action([], data=datas)
+        return self.env.ref('rrhh.action_planilla_pdf').with_context(landscape=True).report_action([], data=datas)
 
-    def print_report(self):
-        data = {
-             'ids': [],
-             'model': 'rrhh.planilla.wizard',
-             'form': self.read()[0]
-        }
-        return self.env.ref('rrhh.action_planilla_pdf').report_action(self, data=data)
-
-    def buscar_partida_nominas(self,slip_ids):
+    def buscar_partida_nominas(self, slip_ids):
         cantidad_nominas_partida = 0
         partidas = {}
         for slip in slip_ids:
@@ -348,7 +340,7 @@ class rrhh_planilla_wizard(models.TransientModel):
 
             libro.close()
             datos = base64.b64encode(f.getvalue())
-            self.write({'archivo': datos, 'name':'planilla.xls'})
+            self.write({'archivo': datos})
             return {
                 'context': self.env.context,
                 'view_type': 'form',

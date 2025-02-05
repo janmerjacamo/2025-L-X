@@ -157,7 +157,7 @@
                           <h3><center><span t-esc="cuenta"/></center></h3><br/>
                       </t>
 
-                      <table style="width: 100%; border-spacing: 8px; border-collapse: separate;">
+                      <table style="width:100%; border-spacing: 8px; border-collapse: separate;">
                           <tr>
                               <th>No.</th>
                               <th>Cod. de empleado</th>
@@ -172,6 +172,7 @@
                               <th class="text-center">Cuenta a depositar</th>
                               <th class="text-center">Observaciones</th>
                           </tr>
+
                           <t t-foreach="reporte['no_agrupado']" t-as="empleado">
                               <tr>
                                   <td><span t-esc="empleado['numero']"/></td>
@@ -195,6 +196,7 @@
                                   <td colspan="6">GRAN TOTAL</td>
                                   <t t-foreach="reporte['total']" t-as="valor">
                                       <td class="text-right"><strong><span t-esc="valor" t-options='{"widget": "monetary", "display_currency": nomina_id.company_id.currency_id}'/></strong></td>
+
                                   </t>
                               </tr>
                           </tr>
