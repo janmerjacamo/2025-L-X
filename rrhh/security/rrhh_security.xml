@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="rrhh_prestamo_multi_company" model="ir.rule">
+            <field name="name">Prestamo multi-company</field>
+            <field name="model_id" ref="rrhh.model_rrhh_prestamo"/>
+            <field name="domain_force">['|',('employee_id.company_id','=',False),('employee_id.company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>
